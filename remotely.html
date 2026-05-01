@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remotely – AI-Powered Freelance Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;
+  --bg2:#111111;
+  --bg3:#1a1a1a;
+  --bg4:#222222;
+  --red:#e8344a;
+  --red2:#ff4d66;
+  --red-glow:rgba(232,52,74,0.15);
+  --red-dim:rgba(232,52,74,0.08);
+  --text:#ffffff;
+  --text2:#a0a0a0;
+  --text3:#666666;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --card:#151515;
+  --card2:#1c1c1c;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --blue:#3b82f6;
+  --radius:14px;
+  --radius-sm:8px;
+  --radius-lg:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:99px}
+
+/* ===== LAYOUT ===== */
+.page{display:none}
+.page.active{display:block}
+
+/* ===== NAV ===== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:68px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;
+  background:rgba(10,10,10,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:1.3rem;font-weight:800;letter-spacing:-0.02em}
+.logo-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.875rem;font-weight:500;color:var(--text2);transition:color .2s}
+.nav-links a:hover,.nav-links a.active-link{color:var(--text)}
+.nav-right{display:flex;gap:10px;align-items:center}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 22px;border-radius:50px;font-size:0.875rem;font-weight:600;
+  border:none;transition:all .2s;white-space:nowrap;
+}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red2);transform:translateY(-1px);box-shadow:0 4px 20px var(--red-glow)}
+.btn-ghost{background:rgba(255,255,255,0.07);color:var(--text);border:1px solid var(--border2)}
+.btn-ghost:hover{background:rgba(255,255,255,0.12)}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid rgba(255,255,255,0.2)}
+.btn-outline:hover{border-color:var(--text);background:rgba(255,255,255,0.05)}
+.btn-sm{padding:7px 16px;font-size:0.8rem}
+.btn-green{background:#166534;color:#bbf7d0;border:1px solid #16a34a}
+.btn-green:hover{background:#15803d}
+.btn-amber{background:#78350f;color:#fde68a;border:1px solid #d97706}
+
+/* ===== HERO ===== */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:8rem 2rem 4rem;
+  position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(232,52,74,0.12) 0%,transparent 65%),
+             radial-gradient(ellipse 60% 40% at 80% 80%,rgba(232,52,74,0.06) 0%,transparent 60%);
+}
+.hero-grain{
+  position:absolute;inset:0;z-index:0;opacity:0.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+/* vertical lines decoration */
+.hero-lines{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-lines::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 80px);
+}
+.hero-content{position:relative;z-index:1;max-width:780px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(232,52,74,0.1);color:var(--red2);
+  border:1px solid rgba(232,52,74,0.25);
+  padding:7px 18px;border-radius:50px;font-size:0.8rem;font-weight:600;
+  margin-bottom:2rem;letter-spacing:0.02em;
+}
+.badge-star{font-size:0.85rem}
+h1{
+  font-size:clamp(2.5rem,7vw,5rem);font-weight:800;line-height:1.08;
+  letter-spacing:-0.03em;margin-bottom:1.5rem;
+}
+h1 .accent{color:var(--red2)}
+.hero-sub{
+  font-size:1.1rem;color:var(--text2);max-width:560px;margin:0 auto 2.5rem;
+  line-height:1.7;font-weight:400;
+}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:4rem}
+.hero-stats{
+  display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;
+  padding-top:2rem;border-top:1px solid var(--border);
+}
+.hero-stat-num{font-size:1.8rem;font-weight:800;color:var(--text);letter-spacing:-0.02em}
+.hero-stat-label{font-size:0.8rem;color:var(--text3);margin-top:2px}
+
+/* ===== SECTION ===== */
+.section{padding:5rem 2rem}
+.container{max-width:1200px;margin:0 auto}
+.section-tag{
+  display:inline-block;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--red2);margin-bottom:0.75rem;
+}
+h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-0.025em;line-height:1.15;margin-bottom:0.75rem}
+.section-sub{font-size:1rem;color:var(--text2);max-width:520px;margin-bottom:3rem;line-height:1.65}
+.text-center{text-align:center}
+.mx-auto{margin-left:auto;margin-right:auto}
+
+/* ===== WHY SECTION ===== */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.why-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.75rem;
+  transition:border-color .2s,transform .2s;
+  position:relative;overflow:hidden;
+}
+.why-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--red),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.why-card:hover{border-color:rgba(232,52,74,0.3);transform:translateY(-3px)}
+.why-card:hover::before{opacity:1}
+.why-icon{
+  width:46px;height:46px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin-bottom:1.25rem;
+  background:var(--red-dim);
+}
+.why-card h3{font-size:1rem;font-weight:700;margin-bottom:0.5rem}
+.why-card p{font-size:0.875rem;color:var(--text2);line-height:1.65}
+
+/* ===== HOW IT WORKS ===== */
+.how-bg{background:var(--bg2)}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;position:relative}
+.steps-grid::before{
+  content:'';position:absolute;top:40px;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  z-index:0;
+}
+.step-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.5rem;text-align:center;
+  position:relative;z-index:1;
+}
+.step-num{
+  width:52px;height:52px;border-radius:50%;
+  background:var(--red);color:white;
+  font-size:1.1rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1rem;box-shadow:0 0 20px var(--red-glow);
+}
+.step-card h3{font-size:0.95rem;font-weight:700;margin-bottom:0.4rem}
+.step-card p{font-size:0.8rem;color:var(--text2);line-height:1.6}
+
+/* ===== CARDS GENERIC ===== */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.5rem;
+  transition:border-color .2s,box-shadow .2s;
+}
+.card:hover{border-color:var(--border2);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+
+/* ===== JOB CARD ===== */
+.jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.job-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;cursor:pointer;transition:all .2s}
+.job-card:hover{border-color:rgba(232,52,74,0.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.4)}
+.job-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
+.job-company{display:flex;align-items:center;gap:10px}
+.co-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;border:1px solid var(--border2);background:var(--bg3)}
+.co-name{font-size:0.75rem;color:var(--text3)}
+.co-title{font-size:0.95rem;font-weight:700;margin-bottom:1px}
+.badge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:50px}
+.badge-new{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+.badge-hot{background:rgba(232,52,74,0.12);color:var(--red2);border:1px solid rgba(232,52,74,0.2)}
+.badge-fixed{background:rgba(59,130,246,0.12);color:#93c5fd;border:1px solid rgba(59,130,246,0.2)}
+.job-desc{font-size:0.83rem;color:var(--text2);margin-bottom:1rem;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.job-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem}
+.tag{font-size:0.72rem;font-weight:500;padding:4px 10px;border-radius:50px;background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid var(--border)}
+.job-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--border)}
+.job-budget{font-size:0.95rem;font-weight:700;color:var(--green)}
+.job-meta{font-size:0.75rem;color:var(--text3)}
+.starter-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(245,158,11,0.1);color:var(--amber);
+  border:1px solid rgba(245,158,11,0.2);
+  font-size:0.68rem;font-weight:700;padding:3px 8px;border-radius:50px;
+  margin-bottom:8px;
+}
+
+/* ===== TRUST SCORE ===== */
+.trust-bar{height:8px;background:var(--bg4);border-radius:99px;overflow:hidden;margin:4px 0}
+.trust-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.trust-high{background:linear-gradient(90deg,var(--green),#4ade80)}
+.trust-mid{background:linear-gradient(90deg,var(--amber),#fbbf24)}
+.trust-low{background:linear-gradient(90deg,var(--red),var(--red2))}
+
+/* ===== FREELANCER CARD ===== */
+.freelancers-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem}
+.freelancer-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s}
+.freelancer-card:hover{border-color:rgba(232,52,74,0.3);transform:translateY(-2px)}
+.fl-avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 0.75rem;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;position:relative}
+.fl-verified{position:absolute;bottom:0;right:0;width:18px;height:18px;background:var(--green);border-radius:50%;border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:0.6rem}
+.fl-name{font-weight:700;font-size:0.95rem;margin-bottom:2px}
+.fl-skill{font-size:0.78rem;color:var(--text3);margin-bottom:0.75rem}
+.fl-location{font-size:0.72rem;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:0.75rem}
+.fl-rate{font-size:1rem;font-weight:800;color:var(--green);margin-bottom:0.75rem}
+.stars{color:var(--amber);font-size:0.75rem;margin-bottom:0.5rem;letter-spacing:1px}
+.trust-score-label{font-size:0.7rem;color:var(--text3);margin-bottom:4px;text-align:left}
+.boost-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(245,158,11,0.1);color:var(--amber);
+  border:1px solid rgba(245,158,11,0.2);
+  font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:50px;
+  margin-bottom:6px;
+}
+
+/* ===== DASHBOARD ===== */
+.dash-layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh;padding-top:68px}
+.sidebar{
+  background:var(--bg2);border-right:1px solid var(--border);
+  padding:1.5rem 1rem;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto;
+}
+.sidebar-section{margin-bottom:1.75rem}
+.sidebar-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:0 0.75rem;margin-bottom:0.5rem}
+.sidebar-link{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:var(--radius-sm);
+  font-size:0.875rem;font-weight:500;color:var(--text2);
+  cursor:pointer;transition:all .15s;margin-bottom:2px;
+}
+.sidebar-link:hover{background:var(--bg3);color:var(--text)}
+.sidebar-link.active{background:var(--red-dim);color:var(--red2);border:1px solid rgba(232,52,74,0.2)}
+.sidebar-icon{font-size:1rem;width:20px;text-align:center}
+.sidebar-badge{margin-left:auto;background:var(--red);color:white;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:50px}
+.dash-main{padding:2rem;overflow-y:auto}
+
+/* ===== STAT CARDS ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.25rem;
+}
+.stat-card-label{font-size:0.75rem;color:var(--text3);margin-bottom:0.5rem;font-weight:500}
+.stat-card-val{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:4px}
+.stat-card-change{font-size:0.75rem;color:var(--green)}
+.stat-card-change.neg{color:var(--red2)}
+
+/* ===== CHAT ===== */
+.chat-layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 68px);background:var(--bg);padding-top:68px}
+.chat-sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.chat-search{padding:1rem;border-bottom:1px solid var(--border)}
+.chat-search input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 14px;color:var(--text);font-size:0.875rem;outline:none}
+.chat-search input:focus{border-color:var(--red)}
+.chat-list{flex:1;overflow-y:auto}
+.chat-item{
+  display:flex;align-items:center;gap:10px;padding:12px 1rem;
+  cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s;
+}
+.chat-item:hover,.chat-item.active{background:var(--bg3)}
+.chat-item.active{border-left:2px solid var(--red)}
+.chat-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0}
+.chat-info{flex:1;min-width:0}
+.chat-name{font-size:0.875rem;font-weight:600}
+.chat-preview{font-size:0.75rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-time{font-size:0.7rem;color:var(--text3)}
+.chat-unread{background:var(--red);color:white;font-size:0.65rem;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.chat-main{display:flex;flex-direction:column}
+.chat-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--bg2)}
+.chat-messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.msg{display:flex;gap:10px;max-width:70%}
+.msg.sent{margin-left:auto;flex-direction:row-reverse}
+.msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0}
+.msg-bubble{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:10px 14px;
+  font-size:0.875rem;line-height:1.5;
+}
+.msg.sent .msg-bubble{background:var(--red);border-color:var(--red);color:white}
+.msg-time{font-size:0.65rem;color:var(--text3);margin-top:4px;text-align:right}
+.msg.sent .msg-time{text-align:left}
+.chat-input{
+  padding:1rem 1.5rem;border-top:1px solid var(--border);
+  display:flex;gap:10px;align-items:center;background:var(--bg2);
+}
+.chat-input input{
+  flex:1;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 14px;
+  color:var(--text);font-size:0.875rem;outline:none;
+}
+.chat-input input:focus{border-color:var(--red)}
+
+/* ===== PROFILE ===== */
+.profile-hero{
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:2rem;margin-bottom:1.5rem;
+}
+.profile-top{display:flex;gap:1.5rem;align-items:flex-start;margin-bottom:1.5rem}
+.profile-avatar{width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;flex-shrink:0;border:3px solid var(--red)}
+.profile-info h2{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.profile-title{font-size:0.95rem;color:var(--text2);margin-bottom:0.5rem}
+.profile-location{font-size:0.8rem;color:var(--text3);display:flex;align-items:center;gap:6px}
+.trust-big{display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px}
+.trust-score-num{font-size:2rem;font-weight:800;color:var(--green)}
+.profile-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
+
+/* ===== ADMIN ===== */
+.admin-tabs{display:flex;gap:4px;background:var(--bg3);border-radius:var(--radius-sm);padding:4px;margin-bottom:2rem;width:fit-content}
+.admin-tab{padding:8px 20px;border-radius:6px;font-size:0.875rem;font-weight:600;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all .2s}
+.admin-tab.active{background:var(--red);color:white}
+.admin-tab:hover:not(.active){background:var(--bg4);color:var(--text)}
+.table{width:100%;border-collapse:collapse}
+.table th{font-size:0.72rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--text3);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left}
+.table td{padding:12px;border-bottom:1px solid var(--border);font-size:0.875rem;vertical-align:middle}
+.table tr:hover td{background:rgba(255,255,255,0.02)}
+.status-dot{display:inline-flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%}
+.dot-green{background:var(--green)}
+.dot-red{background:var(--red)}
+.dot-amber{background:var(--amber)}
+.dot-blue{background:var(--blue)}
+
+/* ===== MODALS ===== */
+.modal-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:2rem;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-lg);padding:2rem;
+  max-width:580px;width:100%;max-height:85vh;overflow-y:auto;
+  transform:translateY(10px);transition:transform .25s;
+}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-header h3{font-size:1.2rem;font-weight:800}
+.modal-close{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:32px;height:32px;border-radius:50%;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}
+.modal-close:hover{background:var(--bg4);color:var(--text)}
+.form-group{margin-bottom:1.25rem}
+.form-label{font-size:0.8rem;font-weight:600;color:var(--text2);margin-bottom:6px;display:block}
+.form-input,.form-textarea,.form-select{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 14px;
+  color:var(--text);font-size:0.875rem;outline:none;resize:vertical;
+}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--red)}
+.form-select option{background:var(--bg3)}
+.ai-box{
+  background:rgba(232,52,74,0.05);border:1px solid rgba(232,52,74,0.2);
+  border-radius:var(--radius-sm);padding:1rem;margin-top:0.75rem;
+}
+.ai-box-label{font-size:0.72rem;font-weight:700;color:var(--red2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem}
+.ai-proposal{font-size:0.85rem;color:var(--text2);line-height:1.7}
+
+/* ===== ESCROW STATUS ===== */
+.escrow-steps{display:flex;gap:0;position:relative;margin:1.5rem 0}
+.escrow-step{flex:1;text-align:center;position:relative}
+.escrow-step::before{content:'';position:absolute;top:15px;left:50%;right:-50%;height:2px;background:var(--border);z-index:0}
+.escrow-step:last-child::before{display:none}
+.escrow-dot{width:32px;height:32px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:0.8rem;position:relative;z-index:1}
+.escrow-step.done .escrow-dot{background:var(--green);border-color:var(--green);color:white}
+.escrow-step.done::before{background:var(--green)}
+.escrow-step.active .escrow-dot{background:var(--red);border-color:var(--red);color:white;box-shadow:0 0 12px var(--red-glow)}
+.escrow-label{font-size:0.72rem;color:var(--text3)}
+
+/* ===== MILESTONE ===== */
+.milestone{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:var(--radius-sm);margin-bottom:8px}
+.milestone-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;margin-top:1px}
+.milestone.done .milestone-check{background:var(--green);border-color:var(--green);color:white;font-size:0.7rem}
+.milestone-info h4{font-size:0.875rem;font-weight:600;margin-bottom:2px}
+.milestone-info span{font-size:0.75rem;color:var(--text3)}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;z-index:9999;
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:14px 20px;
+  font-size:0.875rem;font-weight:500;
+  transform:translateY(20px);opacity:0;pointer-events:none;
+  transition:all .3s;display:flex;align-items:center;gap:10px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-icon{font-size:1rem}
+
+/* ===== AI SPINNER ===== */
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-spinner{
+  width:16px;height:16px;border:2px solid rgba(232,52,74,0.3);
+  border-top-color:var(--red);border-radius:50%;
+  animation:spin .8s linear infinite;display:inline-block;vertical-align:middle;
+}
+
+/* ===== HINDI TOGGLE ===== */
+.lang-toggle{
+  display:flex;gap:4px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:50px;padding:4px;
+}
+.lang-btn{padding:5px 14px;border-radius:50px;font-size:0.75rem;font-weight:600;border:none;cursor:pointer;transition:all .15s;background:transparent;color:var(--text3)}
+.lang-btn.active{background:var(--red);color:white}
+
+/* ===== FOOTER ===== */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 2rem 2rem}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem}
+.footer-logo{font-size:1.3rem;font-weight:800;margin-bottom:0.75rem}
+.footer-desc{font-size:0.85rem;color:var(--text3);line-height:1.7;margin-bottom:1rem}
+.footer-col h4{font-size:0.875rem;font-weight:700;margin-bottom:1rem}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:0.6rem}
+.footer-col a{font-size:0.85rem;color:var(--text3);transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{max-width:1200px;margin:2rem auto 0;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;color:var(--text3)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .why-grid,.steps-grid,.freelancers-grid{grid-template-columns:repeat(2,1fr)}
+  .jobs-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .why-grid,.steps-grid,.freelancers-grid,.jobs-grid{grid-template-columns:1fr}
+  .dash-layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .chat-layout{grid-template-columns:1fr}
+  .chat-sidebar{display:none}
+  .profile-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .5s ease forwards}
+.delay-1{animation-delay:.1s;opacity:0}
+.delay-2{animation-delay:.2s;opacity:0}
+.delay-3{animation-delay:.3s;opacity:0}
+.delay-4{animation-delay:.4s;opacity:0}
+
+/* Selected project in dash */
+.project-row{
+  display:flex;align-items:center;gap:12px;padding:12px;
+  background:var(--bg3);border-radius:var(--radius-sm);border:1px solid var(--border);
+  margin-bottom:8px;cursor:pointer;transition:border-color .2s;
+}
+.project-row:hover{border-color:var(--border2)}
+.project-status{font-size:0.72rem;font-weight:700;padding:3px 9px;border-radius:50px}
+.ps-active{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+.ps-pending{background:rgba(245,158,11,0.1);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+.ps-review{background:rgba(59,130,246,0.1);color:#93c5fd;border:1px solid rgba(59,130,246,0.2)}
+.ps-completed{background:rgba(34,197,94,0.1);color:var(--green)}
+
+/* Chart bars */
+.mini-chart{display:flex;align-items:flex-end;gap:4px;height:60px}
+.bar{background:linear-gradient(to top,var(--red),rgba(232,52,74,0.3));border-radius:3px 3px 0 0;flex:1;transition:height .5s ease}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="main-nav">
+  <a class="nav-logo" onclick="showPage('landing')">
+    <div class="logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase w-6 h-6 text-white" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg></div>
+    Remotely
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a onclick="showPage('jobs')" class="nav-link">Browse Jobs</a></li>
+    <li><a onclick="showPage('freelancers')" class="nav-link">Find Talent</a></li>
+    <li><a onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
+    <li><a onclick="showPage('chat')" class="nav-link">Messages</a></li>
+  </ul>
+  <div class="nav-right" id="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('hi')">हिं</button>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="showPage('login')">Login</button>
+    <button class="btn btn-red btn-sm" onclick="showPage('signup')">Get Started</button>
+  </div>
+</nav>
+
+<!-- ===== LANDING ===== -->
+<div id="page-landing" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-content fade-up">
+      <div class="hero-badge">
+        <span class="badge-star">✦</span>
+        <span id="badge-text">AI-Powered Freelance Platform</span>
+      </div>
+      <h1 id="hero-h1">Start Your Freelance Journey<br><span class="accent">With Confidence</span></h1>
+      <p class="hero-sub" id="hero-sub">Remotely connects beginner freelancers with trusted clients across India. Get your first job with AI-powered proposals and build your dream career.</p>
+      <div class="hero-btns">
+        <button class="btn btn-red" onclick="showPage('signup')">Get Started Free →</button>
+        <button class="btn btn-ghost" onclick="showPage('jobs')">Browse Jobs</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">12,400+</div>
+          <div class="hero-stat-label" id="stat1-label">Active Freelancers</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">₹2.4Cr</div>
+          <div class="hero-stat-label" id="stat2-label">Paid Out This Month</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">98%</div>
+          <div class="hero-stat-label" id="stat3-label">Client Satisfaction</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">3 Days</div>
+          <div class="hero-stat-label" id="stat4-label">Avg. First Job Time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY REMOTELY -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-tag">Why Remotely?</div>
+        <h2 id="why-h2">Built for India's Next Freelancers</h2>
+        <p class="section-sub mx-auto" id="why-sub">We solve the real problems beginners face — trust, visibility, and getting that crucial first project.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card delay-1 fade-up">
+          <div class="why-icon">🤖</div>
+          <h3>AI Proposal Generator</h3>
+          <p>Don't know what to write? Our AI writes a professional, personalized proposal for you based on the job description in seconds.</p>
+        </div>
+        <div class="why-card delay-2 fade-up">
+          <div class="why-icon">🛡️</div>
+          <h3>Trust Score System</h3>
+          <p>Every user earns a Trust Score based on completed work, ratings & response time. No more fake clients or ghost freelancers.</p>
+        </div>
+        <div class="why-card delay-3 fade-up">
+          <div class="why-icon">🚀</div>
+          <h3>Beginner Boost</h3>
+          <p>New to freelancing? Get featured in our "Starter Jobs" section and get priority visibility to clients looking to hire beginners.</p>
+        </div>
+        <div class="why-card delay-1 fade-up">
+          <div class="why-icon">🔒</div>
+          <h3>Escrow Protection</h3>
+          <p>Client funds are held securely until work is approved. You'll always get paid for work you deliver. Zero risk.</p>
+        </div>
+        <div class="why-card delay-2 fade-up">
+          <div class="why-icon">📍</div>
+          <h3>Local Discovery</h3>
+          <p>Find freelancers and clients near you. Filter by city or state — Bhopal, Indore, Jabalpur and 200+ Indian cities.</p>
+        </div>
+        <div class="why-card delay-3 fade-up">
+          <div class="why-icon">💬</div>
+          <h3>Real-time Chat</h3>
+          <p>Built-in messaging, file sharing & project milestones. Everything in one place — no WhatsApp juggling needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section how-bg">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-tag">How It Works</div>
+        <h2>From Zero to Your First ₹1000</h2>
+        <p class="section-sub mx-auto">Four simple steps to start earning as a freelancer.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h3>Create Profile</h3>
+          <p>Sign up, add your skills & portfolio. AI helps you write your bio.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h3>Find Jobs</h3>
+          <p>Browse matched jobs or explore "Starter Jobs" made for beginners.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h3>AI Proposal</h3>
+          <p>Let AI generate a winning proposal. Edit & send in one click.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <h3>Get Paid</h3>
+          <p>Complete the project, get rated, and receive money via UPI or bank.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED JOBS PREVIEW -->
+  <section class="section">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+        <div>
+          <div class="section-tag">Live Jobs</div>
+          <h2 style="margin-bottom:0">Fresh Opportunities</h2>
+        </div>
+        <button class="btn btn-ghost" onclick="showPage('jobs')">View all jobs →</button>
+      </div>
+      <div class="jobs-grid" id="landing-jobs"></div>
+    </div>
+  </section>
+
+  <!-- TOP FREELANCERS PREVIEW -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+        <div>
+          <div class="section-tag">Top Talent</div>
+          <h2 style="margin-bottom:0">Verified Freelancers</h2>
+        </div>
+        <button class="btn btn-ghost" onclick="showPage('freelancers')">See all →</button>
+      </div>
+      <div class="freelancers-grid" id="landing-freelancers"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section text-center">
+    <div class="container">
+      <div style="max-width:600px;margin:0 auto;background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:var(--radius-lg);padding:3.5rem 2rem">
+        <div class="section-tag" style="display:block">Join 12,000+ Freelancers</div>
+        <h2>Ready to Start Earning?</h2>
+        <p style="color:var(--text2);margin-bottom:2rem;font-size:1rem">Create your free profile in 5 minutes. No experience required.</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-red" onclick="showPage('signup')">Join as Freelancer</button>
+          <button class="btn btn-ghost" onclick="showModal('postJob')">Post a Job</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">💼 Remotely</div>
+        <p class="footer-desc">India's most beginner-friendly AI-powered freelance platform. Built to solve trust & access problems.</p>
+        <div style="display:flex;gap:10px">
+          <span style="font-size:1.2rem;cursor:pointer">🐦</span>
+          <span style="font-size:1.2rem;cursor:pointer">📸</span>
+          <span style="font-size:1.2rem;cursor:pointer">💼</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#">Browse Jobs</a></li>
+          <li><a href="#">Find Talent</a></li>
+          <li><a href="#">How it Works</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Freelancer Guide</a></li>
+          <li><a href="#">Client Tips</a></li>
+          <li><a href="#">AI Features</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Remotely Technologies Pvt. Ltd. · Made in India 🇮🇳</span>
+      <span>Indore, Madhya Pradesh</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ===== JOBS PAGE ===== -->
+<div id="page-jobs" class="page" style="padding-top:68px">
+  <div style="background:var(--bg2);border-bottom:1px solid var(--border);padding:2.5rem 2rem">
+    <div class="container">
+      <h2 style="margin-bottom:0.5rem">Browse Jobs</h2>
+      <p style="color:var(--text2);margin-bottom:1.5rem">Find your perfect project match</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input class="form-input" placeholder="🔍  Search jobs, skills, keywords..." style="flex:1;min-width:200px;max-width:400px">
+        <select class="form-select" style="width:auto">
+          <option>All Categories</option>
+          <option>Web Development</option>
+          <option>Design</option>
+          <option>Content Writing</option>
+          <option>Digital Marketing</option>
+          <option>Data Entry</option>
+        </select>
+        <select class="form-select" style="width:auto">
+          <option>All Locations</option>
+          <option>Madhya Pradesh</option>
+          <option>Maharashtra</option>
+          <option>Delhi</option>
+          <option>Remote</option>
+        </select>
+        <select class="form-select" style="width:auto">
+          <option>Any Budget</option>
+          <option>Under ₹5,000</option>
+          <option>₹5k–₹20k</option>
+          <option>₹20k–₹50k</option>
+          <option>₹50k+</option>
+        </select>
+        <button class="btn btn-red">Filter</button>
+      </div>
+    </div>
+  </div>
+  <div class="section" style="padding-top:2rem">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+        <div>
+          <span style="font-weight:700">24 jobs found</span>
+          <span style="color:var(--text3);font-size:0.875rem;margin-left:8px">· Updated 2 min ago</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-size:0.8rem;color:var(--text3)">Show Starter Jobs only</span>
+          <div onclick="this.classList.toggle('on')" style="width:36px;height:20px;background:var(--bg4);border-radius:99px;cursor:pointer;position:relative;border:1px solid var(--border2)" id="starter-toggle">
+            <div style="width:14px;height:14px;background:var(--red);border-radius:50%;position:absolute;top:2px;left:2px;transition:left .2s"></div>
+          </div>
+        </div>
+      </div>
+      <div class="jobs-grid" id="all-jobs"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FREELANCERS PAGE ===== -->
+<div id="page-freelancers" class="page" style="padding-top:68px">
+  <div style="background:var(--bg2);border-bottom:1px solid var(--border);padding:2.5rem 2rem">
+    <div class="container">
+      <h2 style="margin-bottom:0.5rem">Find Talent</h2>
+      <p style="color:var(--text2);margin-bottom:1.5rem">AI-matched freelancers for your project</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input class="form-input" placeholder="🔍  Search by skill, name..." style="flex:1;min-width:200px;max-width:400px">
+        <select class="form-select" style="width:auto">
+          <option>All Skills</option>
+          <option>React / Next.js</option>
+          <option>UI/UX Design</option>
+          <option>Content Writing</option>
+          <option>SEO</option>
+          <option>Video Editing</option>
+        </select>
+        <select class="form-select" style="width:auto">
+          <option>📍 All of India</option>
+          <option>Madhya Pradesh</option>
+          <option>Maharashtra</option>
+          <option>Rajasthan</option>
+          <option>Delhi NCR</option>
+        </select>
+        <button class="btn btn-red">Search</button>
+      </div>
+    </div>
+  </div>
+  <div class="section" style="padding-top:2rem">
+    <div class="container">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap">
+        <span class="badge badge-hot">⚡ Beginner Boost Active</span>
+        <span style="font-size:0.8rem;color:var(--text3)">New freelancers are featured first this week</span>
+      </div>
+      <div class="freelancers-grid" id="all-freelancers"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="page-dashboard" class="page">
+  <div class="dash-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 0.75rem;margin-bottom:1.75rem">
+        <div class="fl-avatar" style="background:linear-gradient(135deg,#7c3aed,var(--red));width:40px;height:40px;font-size:0.9rem;margin:0">AK</div>
+        <div>
+          <div style="font-size:0.875rem;font-weight:700">Arjun Kumar</div>
+          <div style="font-size:0.72rem;color:var(--text3)">Freelancer · Indore</div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Main</div>
+        <div class="sidebar-link active" onclick="switchDashTab('overview',this)"><span class="sidebar-icon">📊</span> Overview</div>
+        <div class="sidebar-link" onclick="switchDashTab('projects',this)"><span class="sidebar-icon">📁</span> My Projects</div>
+        <div class="sidebar-link" onclick="switchDashTab('proposals',this)"><span class="sidebar-icon">📝</span> Proposals<span class="sidebar-badge">3</span></div>
+        <div class="sidebar-link" onclick="switchDashTab('earnings',this)"><span class="sidebar-icon">💰</span> Earnings</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Tools</div>
+        <div class="sidebar-link" onclick="showPage('chat')"><span class="sidebar-icon">💬</span> Messages<span class="sidebar-badge">2</span></div>
+        <div class="sidebar-link" onclick="showPage('profile')"><span class="sidebar-icon">👤</span> My Profile</div>
+        <div class="sidebar-link" onclick="showPage('jobs')"><span class="sidebar-icon">🔍</span> Browse Jobs</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Account</div>
+        <div class="sidebar-link" onclick="showPage('admin')"><span class="sidebar-icon">⚙️</span> Admin Panel</div>
+        <div class="sidebar-link" onclick="showPage('landing')"><span class="sidebar-icon">🚪</span> Logout</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dash-main">
+      <!-- OVERVIEW TAB -->
+      <div id="dash-overview">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+          <div>
+            <h2 style="font-size:1.5rem;margin-bottom:4px">Good Morning, Arjun 👋</h2>
+            <p style="color:var(--text2);font-size:0.875rem">You have 3 new proposal responses and 2 unread messages</p>
+          </div>
+          <button class="btn btn-red btn-sm" onclick="showModal('postJob')">+ Post a Job</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-card-label">Total Earned</div>
+            <div class="stat-card-val" style="color:var(--green)">₹34,500</div>
+            <div class="stat-card-change">↑ +₹8,200 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Active Projects</div>
+            <div class="stat-card-val">4</div>
+            <div class="stat-card-change">2 deadlines this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Trust Score</div>
+            <div class="stat-card-val" style="color:var(--green)">87</div>
+            <div class="stat-card-change">↑ +5 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Profile Views</div>
+            <div class="stat-card-val">342</div>
+            <div class="stat-card-change neg">↓ -12 vs last week</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;flex-wrap:wrap">
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+              <h3 style="font-size:1rem;font-weight:700">Active Projects</h3>
+              <button class="btn btn-ghost btn-sm" onclick="switchDashTab('projects',null)">View all</button>
+            </div>
+            <div id="dash-active-projects"></div>
+          </div>
+          <div>
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">Earnings Chart</h3>
+            <div class="card" style="padding:1rem">
+              <div class="mini-chart" id="mini-chart"></div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px">
+                <span style="font-size:0.7rem;color:var(--text3)">Jan</span>
+                <span style="font-size:0.7rem;color:var(--text3)">Jun</span>
+              </div>
+              <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+                <div style="font-size:0.75rem;color:var(--text3)">This month</div>
+                <div style="font-size:1.4rem;font-weight:800;color:var(--green)">₹8,200</div>
+              </div>
+            </div>
+            <div style="margin-top:1rem">
+              <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.75rem">Trust Score</h3>
+              <div class="card" style="padding:1rem">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
+                  <div style="font-size:2.5rem;font-weight:800;color:var(--green)">87</div>
+                  <div style="flex:1">
+                    <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px">Excellent</div>
+                    <div class="trust-bar"><div class="trust-fill trust-high" style="width:87%"></div></div>
+                  </div>
+                </div>
+                <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px">Completed Projects <span style="color:var(--green);float:right">+30</span></div>
+                <div class="trust-bar" style="margin-bottom:8px"><div class="trust-fill trust-high" style="width:75%"></div></div>
+                <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px">Avg. Rating <span style="color:var(--amber);float:right">4.8★</span></div>
+                <div class="trust-bar" style="margin-bottom:8px"><div class="trust-fill trust-high" style="width:96%"></div></div>
+                <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px">Response Rate <span style="color:var(--text2);float:right">92%</span></div>
+                <div class="trust-bar"><div class="trust-fill trust-high" style="width:92%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS TAB (hidden) -->
+      <div id="dash-projects" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+          <h2 style="font-size:1.5rem">My Projects</h2>
+          <button class="btn btn-red btn-sm" onclick="showModal('escrow')">View Escrow</button>
+        </div>
+        <div id="all-projects-list"></div>
+      </div>
+
+      <!-- PROPOSALS TAB (hidden) -->
+      <div id="dash-proposals" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+          <h2 style="font-size:1.5rem">My Proposals</h2>
+          <button class="btn btn-red btn-sm" onclick="showModal('propose')">+ New Proposal</button>
+        </div>
+        <div id="proposals-list"></div>
+      </div>
+
+      <!-- EARNINGS TAB (hidden) -->
+      <div id="dash-earnings" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:1.5rem">Earnings & Payouts</h2>
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat-card"><div class="stat-card-label">Total Earned</div><div class="stat-card-val" style="color:var(--green)">₹34,500</div></div>
+          <div class="stat-card"><div class="stat-card-label">Pending Payout</div><div class="stat-card-val" style="color:var(--amber)">₹6,200</div></div>
+          <div class="stat-card"><div class="stat-card-label">This Month</div><div class="stat-card-val">₹8,200</div></div>
+        </div>
+        <div class="card" style="margin-top:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">Transaction History</h3>
+          <table class="table">
+            <thead><tr><th>Project</th><th>Client</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody>
+              <tr><td>E-commerce Website</td><td>Priya Sharma</td><td style="color:var(--green)">+₹12,000</td><td><span class="status-dot"><span class="dot dot-green"></span> Paid</span></td><td>Dec 12, 2024</td></tr>
+              <tr><td>Logo Design</td><td>Raj Traders</td><td style="color:var(--green)">+₹2,500</td><td><span class="status-dot"><span class="dot dot-green"></span> Paid</span></td><td>Dec 8, 2024</td></tr>
+              <tr><td>SEO Blog Posts</td><td>StartupIndia</td><td style="color:var(--amber)">₹6,200</td><td><span class="status-dot"><span class="dot dot-amber"></span> In Escrow</span></td><td>Dec 5, 2024</td></tr>
+              <tr><td>App UI Design</td><td>TechCorp</td><td style="color:var(--green)">+₹18,000</td><td><span class="status-dot"><span class="dot dot-green"></span> Paid</span></td><td>Nov 28, 2024</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== CHAT PAGE ===== -->
+<div id="page-chat" class="page">
+  <div class="chat-layout">
+    <div class="chat-sidebar">
+      <div class="chat-search">
+        <input placeholder="🔍  Search conversations...">
+      </div>
+      <div class="chat-list" id="chat-list"></div>
+    </div>
+    <div class="chat-main">
+      <div class="chat-header">
+        <div class="fl-avatar" style="width:38px;height:38px;font-size:0.85rem;background:linear-gradient(135deg,#0d9488,#7c3aed);margin:0">PS</div>
+        <div>
+          <div style="font-weight:700;font-size:0.95rem">Priya Sharma</div>
+          <div style="font-size:0.75rem;color:var(--green);display:flex;align-items:center;gap:4px"><span class="dot dot-green"></span> Online · E-commerce Project</div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-ghost btn-sm" onclick="showModal('milestones')">📋 Milestones</button>
+          <button class="btn btn-ghost btn-sm" onclick="showModal('escrow')">🔒 Escrow</button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input">
+        <input placeholder="Type your message..." id="chat-msg-input" onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="btn btn-ghost btn-sm">📎</button>
+        <button class="btn btn-red btn-sm" onclick="sendMsg()">Send →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROFILE PAGE ===== -->
+<div id="page-profile" class="page" style="padding-top:68px">
+  <div class="section">
+    <div class="container">
+      <div class="profile-hero">
+        <div class="profile-top">
+          <div class="profile-avatar" style="background:linear-gradient(135deg,#7c3aed,var(--red))">AK</div>
+          <div style="flex:1">
+            <h2 style="margin-bottom:4px">Arjun Kumar</h2>
+            <div class="profile-title">Full-Stack Developer & UI Designer</div>
+            <div class="profile-location">📍 Indore, Madhya Pradesh &nbsp;·&nbsp; 🟢 Available for work</div>
+            <div style="display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap">
+              <span class="badge badge-new">✓ Verified</span>
+              <span class="boost-badge">⚡ Beginner Boost</span>
+              <span class="stars">★★★★★</span>
+              <span style="font-size:0.8rem;color:var(--text2)">4.9 (23 reviews)</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:1.6rem;font-weight:800;color:var(--green)">₹800/hr</div>
+            <button class="btn btn-red btn-sm" style="margin-top:8px" onclick="showModal('propose')">Hire Me</button>
+          </div>
+        </div>
+        <div class="trust-big">
+          <div>
+            <div style="font-size:0.72rem;color:var(--text3);margin-bottom:2px">TRUST SCORE</div>
+            <div class="trust-score-num">87</div>
+          </div>
+          <div style="flex:1">
+            <div class="trust-bar" style="height:10px"><div class="trust-fill trust-high" style="width:87%"></div></div>
+            <div style="font-size:0.75rem;color:var(--text2);margin-top:6px">Excellent · Top 15% on Remotely</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:0.75rem;color:var(--text3)">23 projects</div>
+            <div style="font-size:0.75rem;color:var(--text3)">92% response</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <div>
+          <div class="card" style="margin-bottom:1.25rem">
+            <h3 style="font-weight:700;margin-bottom:0.75rem">About</h3>
+            <p style="font-size:0.875rem;color:var(--text2);line-height:1.7">I'm a passionate full-stack developer from Indore with 2 years of experience building web apps. I specialize in React, Node.js, and modern UI design. I've helped 23 clients launch their digital products and I'm eager to help you next.</p>
+          </div>
+          <div class="card" style="margin-bottom:1.25rem">
+            <h3 style="font-weight:700;margin-bottom:0.75rem">Skills</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <span class="tag">React.js</span><span class="tag">Node.js</span><span class="tag">MongoDB</span>
+              <span class="tag">Tailwind CSS</span><span class="tag">Figma</span><span class="tag">Next.js</span>
+              <span class="tag">MySQL</span><span class="tag">TypeScript</span>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <h3 style="font-weight:700">Portfolio</h3>
+              <button class="btn btn-ghost btn-sm" onclick="showModal('aiPortfolio')">✨ AI Suggest</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="background:linear-gradient(135deg,#7c3aed22,#e8344a22);border:1px solid var(--border);border-radius:var(--radius-sm);height:100px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text2);cursor:pointer">🌐 E-commerce Site</div>
+              <div style="background:linear-gradient(135deg,#0d948822,#3b82f622);border:1px solid var(--border);border-radius:var(--radius-sm);height:100px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text2);cursor:pointer">📱 Mobile App UI</div>
+              <div style="background:linear-gradient(135deg,#d9770622,#fbbf2422);border:1px solid var(--border);border-radius:var(--radius-sm);height:100px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text2);cursor:pointer">🎨 Brand Identity</div>
+              <div style="background:var(--bg3);border:1px dashed var(--border);border-radius:var(--radius-sm);height:100px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text3);cursor:pointer">+ Add Project</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:1.25rem">
+            <h3 style="font-weight:700;margin-bottom:1rem">Recent Reviews</h3>
+            <div style="border-bottom:1px solid var(--border);padding-bottom:1rem;margin-bottom:1rem">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <span style="font-weight:600;font-size:0.875rem">Priya Sharma</span>
+                <span class="stars" style="font-size:0.8rem">★★★★★</span>
+              </div>
+              <p style="font-size:0.8rem;color:var(--text2);line-height:1.6">"Arjun delivered an amazing e-commerce website. Very professional and great communication. Will hire again!"</p>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <span style="font-weight:600;font-size:0.875rem">Raj Traders</span>
+                <span class="stars" style="font-size:0.8rem">★★★★☆</span>
+              </div>
+              <p style="font-size:0.8rem;color:var(--text2);line-height:1.6">"Good work on the logo design. Understood our brand vision well and delivered on time."</p>
+            </div>
+          </div>
+          <div class="card">
+            <h3 style="font-weight:700;margin-bottom:1rem">Stats</h3>
+            <div style="display:grid;gap:10px">
+              <div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text3)">Projects Completed</span><span style="font-weight:700">23</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text3)">On-time Delivery</span><span style="font-weight:700;color:var(--green)">96%</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text3)">Repeat Clients</span><span style="font-weight:700">8</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:var(--text3)">Member Since</span><span style="font-weight:700">Jan 2024</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div id="page-admin" class="page" style="padding-top:68px">
+  <div class="section">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem">
+        <div>
+          <div class="section-tag">Admin Panel</div>
+          <h2 style="margin-bottom:0">Remotely Dashboard</h2>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="showPage('dashboard')">← Back</button>
+      </div>
+      <div class="stat-grid" style="margin-bottom:2rem">
+        <div class="stat-card"><div class="stat-card-label">Total Users</div><div class="stat-card-val">12,843</div><div class="stat-card-change">↑ +234 today</div></div>
+        <div class="stat-card"><div class="stat-card-label">Active Jobs</div><div class="stat-card-val">1,247</div><div class="stat-card-change">↑ +89 today</div></div>
+        <div class="stat-card"><div class="stat-card-label">GMV This Month</div><div class="stat-card-val" style="color:var(--green)">₹2.4Cr</div><div class="stat-card-change">↑ +18% vs last</div></div>
+        <div class="stat-card"><div class="stat-card-label">Open Disputes</div><div class="stat-card-val" style="color:var(--red2)">14</div><div class="stat-card-change neg">↑ +3 today</div></div>
+      </div>
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('users',this)">Users</button>
+        <button class="admin-tab" onclick="switchAdminTab('jobs',this)">Jobs</button>
+        <button class="admin-tab" onclick="switchAdminTab('disputes',this)">Disputes</button>
+        <button class="admin-tab" onclick="switchAdminTab('analytics',this)">Analytics</button>
+      </div>
+
+      <div id="admin-users">
+        <div class="card">
+          <table class="table">
+            <thead><tr><th>User</th><th>Role</th><th>Location</th><th>Trust Score</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><b>Arjun Kumar</b></td><td>Freelancer</td><td>Indore, MP</td><td style="color:var(--green)">87</td><td><span class="status-dot"><span class="dot dot-green"></span> Active</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+              <tr><td><b>Priya Sharma</b></td><td>Client</td><td>Bhopal, MP</td><td style="color:var(--green)">91</td><td><span class="status-dot"><span class="dot dot-green"></span> Active</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+              <tr><td><b>Rahul Singh</b></td><td>Freelancer</td><td>Jabalpur, MP</td><td style="color:var(--amber)">54</td><td><span class="status-dot"><span class="dot dot-amber"></span> Warning</span></td><td><button class="btn btn-ghost btn-sm">Review</button></td></tr>
+              <tr><td><b>Neha Patel</b></td><td>Freelancer</td><td>Pune, MH</td><td style="color:var(--green)">78</td><td><span class="status-dot"><span class="dot dot-green"></span> Active</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+              <tr><td><b>Vikram Desai</b></td><td>Client</td><td>Mumbai, MH</td><td style="color:var(--red2)">32</td><td><span class="status-dot"><span class="dot dot-red"></span> Suspended</span></td><td><button class="btn btn-red btn-sm">Unsuspend</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="admin-jobs" style="display:none">
+        <div class="card">
+          <table class="table">
+            <thead><tr><th>Job Title</th><th>Client</th><th>Budget</th><th>Proposals</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><b>E-commerce Website</b></td><td>Priya Sharma</td><td>₹15,000</td><td>8</td><td><span class="status-dot"><span class="dot dot-green"></span> Open</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+              <tr><td><b>Logo Design</b></td><td>Raj Traders</td><td>₹2,500</td><td>12</td><td><span class="status-dot"><span class="dot dot-green"></span> Open</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+              <tr><td><b>SEO Blog Posts</b></td><td>StartupIndia</td><td>₹8,000</td><td>5</td><td><span class="status-dot"><span class="dot dot-blue"></span> In Progress</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+              <tr><td><b>Mobile App UI</b></td><td>TechCorp</td><td>₹25,000</td><td>3</td><td><span class="status-dot"><span class="dot dot-amber"></span> Review</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="admin-disputes" style="display:none">
+        <div class="card">
+          <table class="table">
+            <thead><tr><th>Dispute ID</th><th>Freelancer</th><th>Client</th><th>Amount</th><th>Reason</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>#D-1042</td><td>Rahul Singh</td><td>Vikram Desai</td><td>₹5,000</td><td>Work not delivered</td><td><button class="btn btn-red btn-sm">Resolve</button></td></tr>
+              <tr><td>#D-1041</td><td>Anjali Rao</td><td>ABC Corp</td><td>₹12,000</td><td>Quality issue</td><td><button class="btn btn-red btn-sm">Resolve</button></td></tr>
+              <tr><td>#D-1039</td><td>Mohit Jain</td><td>Priya Tech</td><td>₹3,500</td><td>Scope creep</td><td><button class="btn btn-ghost btn-sm">Review</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="admin-analytics" style="display:none">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+          <div class="card">
+            <h4 style="font-weight:700;margin-bottom:1rem;font-size:0.9rem">Users by Role</h4>
+            <div style="font-size:0.85rem;margin-bottom:8px;display:flex;justify-content:space-between"><span style="color:var(--text3)">Freelancers</span><span style="font-weight:700">9,234</span></div>
+            <div class="trust-bar" style="margin-bottom:12px"><div class="trust-fill trust-high" style="width:72%"></div></div>
+            <div style="font-size:0.85rem;margin-bottom:8px;display:flex;justify-content:space-between"><span style="color:var(--text3)">Clients</span><span style="font-weight:700">3,609</span></div>
+            <div class="trust-bar"><div class="trust-fill" style="width:28%;background:var(--blue)"></div></div>
+          </div>
+          <div class="card">
+            <h4 style="font-weight:700;margin-bottom:1rem;font-size:0.9rem">Top Cities</h4>
+            <div style="font-size:0.85rem;display:grid;gap:8px">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Indore</span><span>2,341</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Bhopal</span><span>1,876</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Jabalpur</span><span>987</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Mumbai</span><span>3,210</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Delhi</span><span>2,129</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h4 style="font-weight:700;margin-bottom:1rem;font-size:0.9rem">AI Usage</h4>
+            <div style="font-size:0.85rem;display:grid;gap:8px">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">AI Proposals Generated</span><span style="color:var(--green)">4,231</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Proposals Accepted</span><span style="color:var(--green)">62%</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">AI Bios Created</span><span>1,892</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Smart Matches Made</span><span>7,430</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="page-login" class="page" style="padding-top:68px;min-height:100vh;display:none;align-items:center;justify-content:center">
+  <div style="width:100%;max-width:440px;margin:2rem auto;padding:2rem">
+    <div style="text-align:center;margin-bottom:2rem">
+      <div class="logo-icon" style="margin:0 auto 1rem;width:48px;height:48px;font-size:1.4rem">💼</div>
+      <h2 style="margin-bottom:6px">Welcome back</h2>
+      <p style="color:var(--text2);font-size:0.9rem">Sign in to your Remotely account</p>
+    </div>
+    <div class="card" style="padding:2rem">
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="you@example.com"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+      <button class="btn btn-red" style="width:100%;justify-content:center;margin-bottom:1rem" onclick="showPage('dashboard');showToast('✅','Logged in successfully!')">Sign In</button>
+      <p style="text-align:center;font-size:0.85rem;color:var(--text3)">Don't have an account? <a onclick="showPage('signup')" style="color:var(--red2);cursor:pointer">Sign up free</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SIGNUP PAGE ===== -->
+<div id="page-signup" class="page" style="padding-top:68px;min-height:100vh;display:none;align-items:center;justify-content:center">
+  <div style="width:100%;max-width:500px;margin:2rem auto;padding:2rem">
+    <div style="text-align:center;margin-bottom:2rem">
+      <div class="logo-icon" style="margin:0 auto 1rem;width:48px;height:48px;font-size:1.4rem">💼</div>
+      <h2 style="margin-bottom:6px">Join Remotely</h2>
+      <p style="color:var(--text2);font-size:0.9rem">Start your freelance journey today — it's free</p>
+    </div>
+    <div class="card" style="padding:2rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem">
+        <button class="btn btn-ghost" style="justify-content:center;width:100%" id="role-fl" onclick="selectRole('freelancer')">👨‍💻 Freelancer</button>
+        <button class="btn btn-ghost" style="justify-content:center;width:100%" id="role-cl" onclick="selectRole('client')">🏢 Client</button>
+      </div>
+      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" placeholder="Arjun Kumar"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="you@example.com"></div>
+      <div class="form-group"><label class="form-label">City</label>
+        <select class="form-select">
+          <option>Select your city</option>
+          <option>Indore, MP</option><option>Bhopal, MP</option><option>Jabalpur, MP</option>
+          <option>Mumbai, MH</option><option>Pune, MH</option><option>Delhi</option>
+          <option>Bangalore</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Create a strong password"></div>
+      <button class="btn btn-red" style="width:100%;justify-content:center;margin-bottom:1rem" onclick="showPage('dashboard');showToast('🎉','Account created! Welcome to Remotely.')">Create Free Account</button>
+      <p style="text-align:center;font-size:0.8rem;color:var(--text3)">By signing up you agree to our <a href="#" style="color:var(--red2)">Terms</a> & <a href="#" style="color:var(--red2)">Privacy Policy</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<!-- Propose / AI Proposal Modal -->
+<div class="modal-overlay" id="modal-propose">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✍️ Submit Proposal</h3>
+      <button class="modal-close" onclick="closeModal('propose')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Job Title</label>
+      <input class="form-input" value="E-commerce Website Development" readonly>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your Bid Amount (₹)</label>
+      <input class="form-input" type="number" placeholder="e.g. 12000" id="bid-amount">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Delivery Timeline</label>
+      <select class="form-select">
+        <option>3 days</option><option>1 week</option><option>2 weeks</option><option>1 month</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your Proposal</label>
+      <textarea class="form-textarea" rows="4" placeholder="Write why you're the best fit..." id="proposal-text"></textarea>
+      <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="generateAIProposal()">✨ Generate with AI</button>
+      <div class="ai-box" id="ai-proposal-box" style="display:none">
+        <div class="ai-box-label">✦ AI-Generated Proposal</div>
+        <div class="ai-proposal" id="ai-proposal-text"></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="useAIProposal()">Use This →</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('propose')">Cancel</button>
+      <button class="btn btn-red" onclick="closeModal('propose');showToast('✅','Proposal submitted successfully!')">Submit Proposal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Post Job Modal -->
+<div class="modal-overlay" id="modal-postJob">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>📋 Post a New Job</h3>
+      <button class="modal-close" onclick="closeModal('postJob')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Job Title</label><input class="form-input" placeholder="e.g. Build a landing page for my startup"></div>
+    <div class="form-group"><label class="form-label">Category</label>
+      <select class="form-select"><option>Web Development</option><option>Design</option><option>Content Writing</option><option>Digital Marketing</option><option>Data Entry</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" rows="4" placeholder="Describe the project, requirements, deliverables..."></textarea></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group"><label class="form-label">Budget (₹)</label><input class="form-input" type="number" placeholder="15000"></div>
+      <div class="form-group"><label class="form-label">Deadline</label><input class="form-input" type="date"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="display:flex;align-items:center;gap:8px">
+        <input type="checkbox" checked> Mark as Starter Job (for beginners)
+      </label>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('postJob')">Cancel</button>
+      <button class="btn btn-red" onclick="closeModal('postJob');showToast('🚀','Job posted! You\\'ll receive proposals soon.')">Post Job</button>
+    </div>
+  </div>
+</div>
+
+<!-- Escrow Modal -->
+<div class="modal-overlay" id="modal-escrow">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🔒 Escrow Status</h3>
+      <button class="modal-close" onclick="closeModal('escrow')">✕</button>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:0.875rem;font-weight:700">E-commerce Website</span><span style="font-weight:800;color:var(--green)">₹15,000</span></div>
+      <div style="font-size:0.75rem;color:var(--text3)">Client: Priya Sharma · Deposited Dec 1, 2024</div>
+    </div>
+    <div class="escrow-steps">
+      <div class="escrow-step done"><div class="escrow-dot">✓</div><div class="escrow-label">Deposited</div></div>
+      <div class="escrow-step done"><div class="escrow-dot">✓</div><div class="escrow-label">In Progress</div></div>
+      <div class="escrow-step active"><div class="escrow-dot">●</div><div class="escrow-label">Under Review</div></div>
+      <div class="escrow-step"><div class="escrow-dot">4</div><div class="escrow-label">Released</div></div>
+    </div>
+    <div style="background:rgba(232,52,74,0.05);border:1px solid rgba(232,52,74,0.2);border-radius:var(--radius-sm);padding:1rem;margin-top:1rem;font-size:0.85rem;color:var(--text2)">
+      ⏳ Client is reviewing your submission. Payment will be released within 48 hours of approval.
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('escrow')">Close</button>
+      <button class="btn btn-green" onclick="closeModal('escrow');showToast('💰','Payment of ₹15,000 released to your wallet!')">Release Payment (Client)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Milestones Modal -->
+<div class="modal-overlay" id="modal-milestones">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>📋 Project Milestones</h3>
+      <button class="modal-close" onclick="closeModal('milestones')">✕</button>
+    </div>
+    <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem">E-commerce Website · Priya Sharma</p>
+    <div id="milestones-list"></div>
+    <button class="btn btn-ghost btn-sm" style="margin-top:0.75rem;width:100%;justify-content:center">+ Add Milestone</button>
+  </div>
+</div>
+
+<!-- AI Portfolio Modal -->
+<div class="modal-overlay" id="modal-aiPortfolio">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✨ AI Portfolio Suggestions</h3>
+      <button class="modal-close" onclick="closeModal('aiPortfolio')">✕</button>
+    </div>
+    <p style="font-size:0.875rem;color:var(--text2);margin-bottom:1rem">Based on your skills in React, Node.js & Figma, here are project ideas to add to your portfolio:</p>
+    <div style="display:grid;gap:10px" id="ai-portfolio-suggestions">
+      <div class="card" style="padding:1rem"><div style="font-weight:700;margin-bottom:4px">🛒 Grocery Delivery App UI</div><div style="font-size:0.8rem;color:var(--text2)">Design a mobile-first grocery delivery app UI in Figma. Showcases your product thinking & design skills.</div><button class="btn btn-ghost btn-sm" style="margin-top:8px">Add to Portfolio</button></div>
+      <div class="card" style="padding:1rem"><div style="font-weight:700;margin-bottom:4px">📊 Freelancer Earnings Dashboard</div><div style="font-size:0.8rem;color:var(--text2)">Build a React dashboard with charts. Perfect for showcasing full-stack skills to clients.</div><button class="btn btn-ghost btn-sm" style="margin-top:8px">Add to Portfolio</button></div>
+      <div class="card" style="padding:1rem"><div style="font-weight:700;margin-bottom:4px">🏪 Local Business Website Template</div><div style="font-size:0.8rem;color:var(--text2)">Create a reusable website template for local shops. Highly relevant for Indian client market.</div><button class="btn btn-ghost btn-sm" style="margin-top:8px">Add to Portfolio</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-icon" id="toast-icon"></span><span id="toast-msg"></span></div>
+
+<script>
+// ===== DATA =====
+const jobs = [
+  {title:'E-commerce Website',company:'Priya Traders',icon:'🛒',budget:'₹12,000–₹18,000',tags:['React','Node.js','MongoDB'],type:'Fixed Price',loc:'Bhopal, MP',desc:'Build a complete online store with product listings, cart, and payment integration.',badge:'hot',starter:false,proposals:8,posted:'2h ago'},
+  {title:'Logo & Brand Identity',company:'Raj Enterprises',icon:'🎨',budget:'₹2,000–₹5,000',tags:['Figma','Illustrator','Branding'],type:'Fixed Price',loc:'Indore, MP',desc:'Design a modern logo and brand kit for a local clothing startup.',badge:'new',starter:true,proposals:12,posted:'4h ago'},
+  {title:'WordPress Blog Setup',company:'StartupIndia',icon:'✍️',budget:'₹3,000–₹6,000',tags:['WordPress','SEO','Content'],type:'Fixed Price',loc:'Remote',desc:'Set up a WordPress blog with 5 sample posts, SEO optimized.',badge:'new',starter:true,proposals:5,posted:'1d ago'},
+  {title:'React Native Mobile App',company:'TechCorp',icon:'📱',budget:'₹25,000–₹40,000',tags:['React Native','Firebase','UI Design'],type:'Fixed Price',loc:'Mumbai, MH',desc:'Build a cross-platform mobile app for a food delivery startup.',badge:'hot',starter:false,proposals:3,posted:'6h ago'},
+  {title:'Social Media Posts (30)',company:'LocalBrand Co',icon:'📸',budget:'₹1,500–₹3,000',tags:['Canva','Photoshop','Social Media'],type:'Fixed Price',loc:'Jabalpur, MP',desc:'Create 30 Instagram & Facebook posts for a local restaurant.',badge:'new',starter:true,proposals:18,posted:'3h ago'},
+  {title:'Data Entry & Excel Work',company:'Sharma Associates',icon:'📊',budget:'₹800–₹2,000',tags:['Excel','Data Entry','Google Sheets'],type:'Fixed Price',loc:'Indore, MP',desc:'Enter 500 product records into Excel with formatting and formulas.',badge:'new',starter:true,proposals:22,posted:'5h ago'},
+];
+
+const freelancers = [
+  {name:'Arjun Kumar',skill:'Full-Stack Developer',loc:'Indore, MP',rate:'₹800/hr',trust:87,rating:'★★★★★',reviews:23,avatar:'AK',color:'linear-gradient(135deg,#7c3aed,#e8344a)',verified:true,boost:true},
+  {name:'Neha Patel',skill:'UI/UX Designer',loc:'Pune, MH',rate:'₹650/hr',trust:78,rating:'★★★★★',reviews:15,avatar:'NP',color:'linear-gradient(135deg,#0d9488,#3b82f6)',verified:true,boost:false},
+  {name:'Rahul Singh',skill:'Content Writer',loc:'Jabalpur, MP',rate:'₹400/hr',trust:54,rating:'★★★★☆',reviews:8,avatar:'RS',color:'linear-gradient(135deg,#d97706,#f59e0b)',verified:false,boost:true},
+  {name:'Anjali Rao',skill:'Digital Marketer',loc:'Bhopal, MP',rate:'₹550/hr',trust:91,rating:'★★★★★',reviews:41,avatar:'AR',color:'linear-gradient(135deg,#e8344a,#f59e0b)',verified:true,boost:false},
+  {name:'Vikram Sharma',skill:'WordPress Dev',loc:'Indore, MP',rate:'₹350/hr',trust:62,rating:'★★★★☆',reviews:11,avatar:'VS',color:'linear-gradient(135deg,#3b82f6,#0d9488)',verified:true,boost:true},
+  {name:'Pooja Mehta',skill:'Video Editor',loc:'Delhi',rate:'₹700/hr',trust:83,rating:'★★★★★',reviews:29,avatar:'PM',color:'linear-gradient(135deg,#6d28d9,#e8344a)',verified:true,boost:false},
+  {name:'Suresh Yadav',skill:'SEO Specialist',loc:'Nagpur, MH',rate:'₹500/hr',trust:71,rating:'★★★★☆',reviews:17,avatar:'SY',color:'linear-gradient(135deg,#059669,#3b82f6)',verified:false,boost:true},
+  {name:'Divya Joshi',skill:'Graphic Designer',loc:'Raipur, CG',rate:'₹450/hr',trust:67,rating:'★★★★☆',reviews:9,avatar:'DJ',color:'linear-gradient(135deg,#f59e0b,#ef4444)',verified:true,boost:true},
+];
+
+const messages = [
+  {id:1,name:'Priya Sharma',preview:'Looks great! Can you share the login page?',time:'2m ago',unread:2,color:'linear-gradient(135deg,#0d9488,#7c3aed)',initials:'PS',active:true},
+  {id:2,name:'Raj Traders',preview:'When will the logo be ready?',time:'1h ago',unread:0,color:'linear-gradient(135deg,#d97706,#ef4444)',initials:'RT',active:false},
+  {id:3,name:'TechCorp',preview:'Please check the latest APK build.',time:'3h ago',unread:1,color:'linear-gradient(135deg,#3b82f6,#6d28d9)',initials:'TC',active:false},
+  {id:4,name:'StartupIndia',preview:'Your proposal has been accepted!',time:'Yesterday',unread:0,color:'linear-gradient(135deg,#059669,#0d9488)',initials:'SI',active:false},
+];
+
+const chatMsgs = [
+  {text:'Hi Arjun! I reviewed your proposal and loved it. When can you start?',sent:false,time:'10:30 AM'},
+  {text:'Thanks Priya! I can start right away. I\'ve already outlined the project structure.',sent:true,time:'10:32 AM'},
+  {text:'Perfect! I\'ve deposited ₹15,000 into escrow. Here\'s what I need first — a homepage wireframe.',sent:false,time:'10:35 AM'},
+  {text:'Got it! I\'ll share a Figma wireframe by tomorrow morning. Any specific color preferences?',sent:true,time:'10:36 AM'},
+  {text:'I like dark mode with red accents — modern and bold. Budget is flexible if quality is great.',sent:false,time:'10:40 AM'},
+  {text:'Looks great! Can you share the login page now?',sent:false,time:'11:15 AM'},
+];
+
+const projects = [
+  {title:'E-commerce Website',client:'Priya Sharma',budget:'₹15,000',status:'review',deadline:'Dec 20'},
+  {title:'SEO Blog Posts',client:'StartupIndia',budget:'₹8,000',status:'active',deadline:'Dec 18'},
+  {title:'App UI Design',client:'TechCorp',budget:'₹25,000',status:'active',deadline:'Jan 5'},
+  {title:'Social Media Kit',client:'LocalBrand Co',budget:'₹3,000',status:'pending',deadline:'Dec 22'},
+];
+
+const milestones = [
+  {title:'Project Setup & Planning',desc:'Repository, tools, initial architecture',done:true},
+  {title:'Homepage & Navigation',desc:'Responsive header, hero section, footer',done:true},
+  {title:'Product Listings',desc:'Category pages, filters, product cards',done:false},
+  {title:'Shopping Cart & Checkout',desc:'Cart logic, payment integration',done:false},
+  {title:'Final Testing & Deployment',desc:'Cross-browser testing, live deployment',done:false},
+];
+
+// ===== RENDER =====
+function renderJobCard(j, onclick='showModal(\'propose\')'){
+  return `<div class="job-card" onclick="${onclick}">
+    ${j.starter?'<div class="starter-badge">⭐ Starter Job</div>':''}
+    <div class="job-top">
+      <div class="job-company">
+        <div class="co-logo">${j.icon}</div>
+        <div>
+          <div class="co-title">${j.title}</div>
+          <div class="co-name">${j.company}</div>
+        </div>
+      </div>
+      <span class="badge badge-${j.badge}">${j.badge==='hot'?'🔥 Hot':'✦ New'}</span>
+    </div>
+    <div class="job-desc">${j.desc}</div>
+    <div class="job-tags">${j.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <div class="job-footer">
+      <div><div class="job-budget">${j.budget}</div><div class="job-meta">${j.loc} · ${j.type}</div></div>
+      <div style="text-align:right"><div style="font-size:0.75rem;color:var(--text3)">${j.proposals} proposals</div><div style="font-size:0.7rem;color:var(--text3)">${j.posted}</div></div>
+    </div>
+  </div>`;
+}
+
+function renderFreelancerCard(f){
+  const tClass = f.trust>=80?'trust-high':f.trust>=60?'trust-mid':'trust-low';
+  return `<div class="freelancer-card" onclick="showPage('profile')">
+    ${f.boost?'<div class="boost-badge">⚡ Beginner Boost</div>':'<div style="height:22px"></div>'}
+    <div class="fl-avatar" style="background:${f.color};margin:0 auto 0.75rem">
+      ${f.initials||f.avatar}${f.verified?'<div class="fl-verified">✓</div>':''}
+    </div>
+    <div class="fl-name">${f.name}</div>
+    <div class="fl-skill">${f.skill}</div>
+    <div class="fl-location">📍 ${f.loc}</div>
+    <div class="stars">${f.rating}</div>
+    <div class="fl-rate">${f.rate}</div>
+    <div class="trust-score-label">Trust Score: ${f.trust}/100</div>
+    <div class="trust-bar"><div class="trust-fill ${tClass}" style="width:${f.trust}%"></div></div>
+  </div>`;
+}
+
+// ===== INIT =====
+function init(){
+  // Landing jobs (first 3)
+  document.getElementById('landing-jobs').innerHTML = jobs.slice(0,3).map(j=>renderJobCard(j)).join('');
+  // Landing freelancers (first 4)
+  document.getElementById('landing-freelancers').innerHTML = freelancers.slice(0,4).map(f=>renderFreelancerCard(f)).join('');
+  // All jobs
+  document.getElementById('all-jobs').innerHTML = jobs.map(j=>renderJobCard(j)).join('');
+  // All freelancers
+  document.getElementById('all-freelancers').innerHTML = freelancers.map(f=>renderFreelancerCard(f)).join('');
+  // Chat list
+  document.getElementById('chat-list').innerHTML = messages.map(m=>`
+    <div class="chat-item${m.active?' active':''}" onclick="this.parentNode.querySelectorAll('.chat-item').forEach(x=>x.classList.remove('active'));this.classList.add('active')">
+      <div class="chat-avatar" style="background:${m.color}">${m.initials}</div>
+      <div class="chat-info">
+        <div style="display:flex;justify-content:space-between"><div class="chat-name">${m.name}</div><div class="chat-time">${m.time}</div></div>
+        <div class="chat-preview">${m.preview}</div>
+      </div>
+      ${m.unread?`<div class="chat-unread">${m.unread}</div>`:''}
+    </div>`).join('');
+  // Chat messages
+  document.getElementById('chat-messages').innerHTML = chatMsgs.map(m=>`
+    <div class="msg${m.sent?' sent':''}">
+      ${!m.sent?`<div class="msg-avatar" style="background:linear-gradient(135deg,#0d9488,#7c3aed)">PS</div>`:''}
+      <div>
+        <div class="msg-bubble">${m.text}</div>
+        <div class="msg-time">${m.time}</div>
+      </div>
+      ${m.sent?`<div class="msg-avatar" style="background:linear-gradient(135deg,#7c3aed,#e8344a)">AK</div>`:''}
+    </div>`).join('');
+  // Scroll chat to bottom
+  const cm = document.getElementById('chat-messages');
+  if(cm) cm.scrollTop = cm.scrollHeight;
+
+  // Dashboard projects
+  const ap = document.getElementById('dash-active-projects');
+  if(ap) ap.innerHTML = projects.slice(0,3).map(p=>`
+    <div class="project-row" onclick="showModal('milestones')">
+      <div style="flex:1"><div style="font-weight:600;font-size:0.875rem;margin-bottom:2px">${p.title}</div><div style="font-size:0.75rem;color:var(--text3)">${p.client} · Due ${p.deadline}</div></div>
+      <span class="project-status ${p.status==='review'?'ps-review':p.status==='active'?'ps-active':'ps-pending'}">${p.status==='review'?'Under Review':p.status==='active'?'In Progress':'Pending'}</span>
+    </div>`).join('');
+
+  // All projects list
+  const pl = document.getElementById('all-projects-list');
+  if(pl) pl.innerHTML = projects.map(p=>`
+    <div class="card" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-weight:700;margin-bottom:4px">${p.title}</div>
+          <div style="font-size:0.8rem;color:var(--text3)">Client: ${p.client} · Budget: ${p.budget} · Deadline: ${p.deadline}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="project-status ${p.status==='review'?'ps-review':p.status==='active'?'ps-active':'ps-pending'}">${p.status==='review'?'Under Review':p.status==='active'?'In Progress':'Pending'}</span>
+          <button class="btn btn-ghost btn-sm" onclick="showModal('milestones')">Milestones</button>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('chat')">Chat</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Proposals list
+  const propList = document.getElementById('proposals-list');
+  if(propList) propList.innerHTML = [
+    {job:'React Native App',company:'TechCorp',bid:'₹30,000',status:'pending',submitted:'2d ago'},
+    {job:'SEO Optimization',company:'StartupIndia',bid:'₹8,000',status:'accepted',submitted:'5d ago'},
+    {job:'Dashboard Design',company:'DataPro',bid:'₹15,000',status:'rejected',submitted:'1w ago'},
+  ].map(p=>`
+    <div class="card" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-weight:700;margin-bottom:4px">${p.job}</div>
+          <div style="font-size:0.8rem;color:var(--text3)">${p.company} · Your bid: ${p.bid} · Submitted ${p.submitted}</div>
+        </div>
+        <span class="badge ${p.status==='accepted'?'badge-new':p.status==='rejected'?'badge-hot':'badge-fixed'}">${p.status==='accepted'?'✓ Accepted':p.status==='rejected'?'✕ Not Selected':'⏳ Pending'}</span>
+      </div>
+    </div>`).join('');
+
+  // Milestones
+  const ml = document.getElementById('milestones-list');
+  if(ml) ml.innerHTML = milestones.map((m,i)=>`
+    <div class="milestone${m.done?' done':''}" onclick="toggleMilestone(${i},this)">
+      <div class="milestone-check">${m.done?'✓':''}</div>
+      <div class="milestone-info"><h4>${m.title}</h4><span>${m.desc}</span></div>
+    </div>`).join('');
+
+  // Mini chart
+  const mc = document.getElementById('mini-chart');
+  if(mc){
+    [30,45,25,60,40,80,55,70,90,65,85,75].forEach(h=>{
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = h+'%';
+      mc.appendChild(bar);
+    });
+  }
+}
+
+// ===== NAVIGATION =====
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>{p.style.display='none';p.classList.remove('active')});
+  const el = document.getElementById('page-'+page);
+  if(el){
+    el.style.display = ['login','signup'].includes(page)?'flex':'block';
+    el.classList.add('active');
+  }
+  window.scrollTo(0,0);
+  // update nav links
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active-link'));
+}
+
+// ===== DASHBOARD TABS =====
+function switchDashTab(tab, el){
+  ['overview','projects','proposals','earnings'].forEach(t=>{
+    const el2 = document.getElementById('dash-'+t);
+    if(el2) el2.style.display = t===tab?'block':'none';
+  });
+  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+// ===== ADMIN TABS =====
+function switchAdminTab(tab, el){
+  ['users','jobs','disputes','analytics'].forEach(t=>{
+    const el2 = document.getElementById('admin-'+t);
+    if(el2) el2.style.display = t===tab?'block':'none';
+  });
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+// ===== MODALS =====
+function showModal(id){
+  document.getElementById('modal-'+id).classList.add('open');
+}
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',function(e){if(e.target===this) this.classList.remove('open')});
+});
+
+// ===== AI PROPOSAL =====
+function generateAIProposal(){
+  const box = document.getElementById('ai-proposal-box');
+  const txt = document.getElementById('ai-proposal-text');
+  box.style.display='block';
+  txt.innerHTML = '<span class="ai-spinner"></span> Generating...';
+  setTimeout(()=>{
+    txt.innerHTML = `Hi! I'm Arjun Kumar, a Full-Stack Developer from Indore with 2 years of experience building e-commerce platforms. I've successfully delivered 23+ projects including online stores for local Indian businesses.\n\nFor your project, I'll use React.js for a fast, responsive frontend with Node.js + MongoDB backend. I'll include:\n✅ Product listings with filters\n✅ Cart & Razorpay payment integration\n✅ Admin dashboard\n✅ Mobile-first responsive design\n\nDelivery in 14 days. Let's build something amazing! 🚀`;
+  },1500);
+}
+
+function useAIProposal(){
+  document.getElementById('proposal-text').value = document.getElementById('ai-proposal-text').innerText;
+  showToast('✨','AI proposal added to your message!');
+}
+
+// ===== CHAT =====
+function sendMsg(){
+  const input = document.getElementById('chat-msg-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const cm = document.getElementById('chat-messages');
+  const msgEl = document.createElement('div');
+  msgEl.className = 'msg sent';
+  msgEl.innerHTML = `
+    <div>
+      <div class="msg-bubble">${text}</div>
+      <div class="msg-time">Just now</div>
+    </div>
+    <div class="msg-avatar" style="background:linear-gradient(135deg,#7c3aed,#e8344a)">AK</div>`;
+  cm.appendChild(msgEl);
+  cm.scrollTop = cm.scrollHeight;
+  input.value = '';
+}
+
+// ===== MILESTONE TOGGLE =====
+function toggleMilestone(idx, el){
+  el.classList.toggle('done');
+  const check = el.querySelector('.milestone-check');
+  check.textContent = el.classList.contains('done')?'✓':'';
+}
+
+// ===== TOAST =====
+function showToast(icon, msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ===== LANG =====
+const translations = {
+  en:{badge:'AI-Powered Freelance Platform',h1:'Start Your Freelance Journey\n<span class="accent">With Confidence</span>',sub:'Remotely connects beginner freelancers with trusted clients across India. Get your first job with AI-powered proposals and build your dream career.',s1:'Active Freelancers',s2:'Paid Out This Month',s3:'Client Satisfaction',s4:'Avg. First Job Time'},
+  hi:{badge:'AI-संचालित फ्रीलांस प्लेटफॉर्म',h1:'अपना फ्रीलांस सफर शुरू करें<br><span class="accent">आत्मविश्वास के साथ</span>',sub:'Remotely भारत भर में शुरुआती फ्रीलांसर्स को विश्वसनीय क्लाइंट्स से जोड़ता है। AI प्रपोज़ल से अपनी पहली नौकरी पाएं।',s1:'सक्रिय फ्रीलांसर',s2:'इस महीने भुगतान',s3:'क्लाइंट संतुष्टि',s4:'पहली नौकरी में समय'},
+};
+function setLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  const t = translations[lang];
+  const badgeEl = document.getElementById('badge-text');
+  const h1El = document.getElementById('hero-h1');
+  const subEl = document.getElementById('hero-sub');
+  if(badgeEl) badgeEl.textContent = t.badge;
+  if(h1El) h1El.innerHTML = t.h1;
+  if(subEl) subEl.textContent = t.sub;
+  ['1','2','3','4'].forEach(n=>{
+    const el = document.getElementById('stat'+n+'-label');
+    if(el) el.textContent = t['s'+n];
+  });
+}
+
+// ===== ROLE SELECT =====
+function selectRole(role){
+  document.getElementById('role-fl').className = 'btn '+(role==='freelancer'?'btn-red':'btn-ghost');
+  document.getElementById('role-cl').className = 'btn '+(role==='client'?'btn-red':'btn-ghost');
+}
+
+// ===== START =====
+init();
+showPage('landing');
+</script>
+</body>
+</html>
